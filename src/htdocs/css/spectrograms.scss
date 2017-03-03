@@ -1,0 +1,12 @@
+@import '_common.scss';
+
+.stations {
+  display: flex;
+  flex-flow: row wrap;
+
+  li {
+    margin-right: 1em;
+    text-align: center;
+    width: 144px;
+  }
+}
