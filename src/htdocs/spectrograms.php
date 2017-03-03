@@ -115,4 +115,4 @@ $listHtml .= '</ul>';
 
 <?php print $listHtml; ?>
 
-<p class="back">&laquo; <a href="../helicorders">Back to station list / map</a></p>
+<p class="back">&laquo; <a href="../spectrograms">Back to station list / map</a></p>
