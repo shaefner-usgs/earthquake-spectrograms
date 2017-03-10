@@ -13,7 +13,7 @@ $NAVIGATION =
     navItem("$section", 'Spectrograms', $matches_index) .
     navItem("$section/about.php", 'About the Spectrograms') .
     navItem("$section/examples.php", 'Examples') .
-    navItem("/monitoring/helicorders", 'Seismogram Displays')
+    navItem("/monitoring/seismograms", 'Seismogram Displays')
   );
 
 print $NAVIGATION;
