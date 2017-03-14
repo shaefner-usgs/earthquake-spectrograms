@@ -20,14 +20,10 @@ function getHeaderComponents ($date) {
   $prevLink = '';
   $title = date('D M j, Y', $time);
 
-  if ($date === 'latest') {
-    $title = 'Past 24 hours';
-    $nextHref = '';
-    $prevHref = date('Ymd', strtotime($today));
-  } else if ($date === $cutoffDate) {
+  if ($date === $cutoffDate) {
     $prevHref = '';
   } else if ($date === $today) {
-    $nextHref = 'latest';
+    $nextHref = '';
   }
   if ($nextHref) {
     $nextLink = '<a href="' . $nextHref . '" class="next">Next<i

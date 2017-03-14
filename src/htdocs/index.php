@@ -3,6 +3,8 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
+$today = date('Ymd');
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
@@ -34,9 +36,10 @@ foreach ($stations['features'] as $feature) {
     ' ' . $props['code'];
 
   $stationsHtml .= sprintf('<li>
-      <a href="spectrograms/%s/latest" title="View station">%s</a>
+      <a href="spectrograms/%s/%s" title="View station">%s</a>
     </li>',
     $feature['id'],
+    $today,
     $name
   );
 }
@@ -58,4 +61,5 @@ $stationsHtml .= '</ul>';
 
 <?php print $stationsHtml; ?>
 
-<p>View <a href="spectrograms/latest">spectrograms for all stations</a> &raquo;</p>
+<p>View <a href="spectrograms/<?php print $today; ?>">spectrograms for all
+  stations</a> &raquo;</p>

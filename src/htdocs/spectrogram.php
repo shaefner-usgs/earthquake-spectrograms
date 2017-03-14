@@ -41,9 +41,6 @@ $header = getHeaderComponents($date);
 
 // spectrogram plot
 $imgDateStr = $date;
-if ($date === 'latest') {
-  $imgDateStr = '22221212'; // 'latest' plots use this date string
-}
 $file = sprintf('%s/nc.%s_00.%s00.gif',
   $set,
   str_replace(' ', '_', $instrument),

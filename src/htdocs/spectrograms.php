@@ -22,10 +22,6 @@ if (!isset($TEMPLATE)) {
 
   function getImg ($date, $id, $instrument) {
     $imgDateStr = $date;
-    if ($date === 'latest') {
-      $imgDateStr = '22221212'; // 'latest' plots use this date string
-    }
-
     $file = sprintf('%s/tn-nc.%s_00.%s00.gif',
       $GLOBALS['set'],
       str_replace(' ', '_', $instrument),
@@ -68,15 +64,10 @@ if ($id) { // show plots for a given station
     return;
   }
 
-  // Loop thru past 15 days, plus latest
-  for ($i = -1; $i < 15; $i ++) {
-    if ($i === -1) { // latest
-      $date = 'latest';
-      $imgTitle = 'Past 24 hours';
-    } else {
-      $date = date('Ymd', strtotime('-' . $i . ' day'));
-      $imgTitle = date('M j, Y', strtotime($date));
-    }
+  // Loop thru past 15 days
+  for ($i = 0; $i < 15; $i ++) {
+    $date = date('Ymd', strtotime('-' . $i . ' day'));
+    $imgTitle = date('M j, Y', strtotime($date));
     $img = getImg($date, $id, $instrument);
 
     $listHtml .= "<li><h3>$imgTitle</h3>$img</li>";

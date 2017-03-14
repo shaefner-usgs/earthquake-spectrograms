@@ -21,30 +21,19 @@ $output = [
 ];
 
 while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
-  $img = sprintf('tn-nc.%s_%s_%s_%s_00.2222121200.gif',
+  $img = sprintf('tn-nc.%s_%s_%s_%s_00.%s00.gif',
     $row['site'],
     $row['type'],
     $row['network'],
-    $row['code']
+    $row['code'],
+    $today
   );
-  $link = 'latest';
+  $link = $today;
   $path = "{$CONFIG['DATA_DIR']}/$set_dir";
 
-  // Look for today's plot if 'latest' not available
   if (!file_exists("$path/$img")) {
-    $img = sprintf('tn-nc.%s_%s_%s_%s_00.%s00.gif',
-      $row['site'],
-      $row['type'],
-      $row['network'],
-      $row['code'],
-      $today
-    );
-    $link = $today;
-
-    if (!file_exists("$path/$img")) { // neither plot available
-      $img = '';
-      $link = '';
-    }
+    $img = '';
+    $link = '';
   }
 
   $feature = [
