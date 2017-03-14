@@ -38,7 +38,7 @@ if (!isset($TEMPLATE)) {
         $file
       );
     } else {
-      $img = '<p>No data available</p>';
+      $img = '<p class="nodata">No data available</p>';
     }
 
     return $img;
