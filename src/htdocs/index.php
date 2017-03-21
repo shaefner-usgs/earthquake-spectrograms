@@ -32,6 +32,8 @@ if (!isset($TEMPLATE)) {
   // importJsonToArray() sets headers -> needs to run before including template
   $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $timespan);
 
+  print_r($stations);
+
   include 'template.inc.php';
 }
 
@@ -42,13 +44,17 @@ foreach ($stations['features'] as $feature) {
   $props = $feature['properties'];
   $name = $props['site'] . ' ' . $props['type'] . ' ' . $props['network'] .
     ' ' . $props['code'];
+  $link = "$today/00"; // default
+  if ($props['link'] !== '') {
+    $link = $props['link'];
+  }
 
   $stationsHtml .= sprintf('<li>
       <a href="%s/%s/%s" title="View station">%s</a>
     </li>',
     $timespan,
     $feature['id'],
-    $today,
+    $link,
     $name
   );
 }
