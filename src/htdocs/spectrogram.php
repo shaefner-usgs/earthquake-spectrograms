@@ -7,18 +7,15 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 $db = new Db;
 
 $date = safeParam('date');
+$hour = safeParam('hour', '00');
 $id = safeParam('id');
 $timespan = safeParam('timespan', '24hr');
-
-$set = 'nca';
-if ($timespan === '2hr') {
-  $set = 'nca2';
-}
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../../css/spectrogram.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $CONFIG['MOUNT_PATH'] .
+    '/css/spectrogram.css" />';
   $FOOT = '';
 
   // Query db to get station details
@@ -35,26 +32,62 @@ if (!isset($TEMPLATE)) {
     return;
   }
 
-  $header = getHeaderComponents($date);
+  $set = 'nca';
+  if ($timespan === '2hr') {
+    $set = 'nca2';
+  }
 
   // spectrogram plot
   $imgDateStr = $date;
-  $file = sprintf('%s/nc.%s_00.%s00.gif',
-    $set,
+  $file = sprintf('nc.%s_00.%s%s.gif',
     str_replace(' ', '_', $instrument),
-    $imgDateStr
+    $imgDateStr,
+    $hour
   );
 
+  // Create thumbnails if viewing 2hr plots
+  if ($timespan === '2hr') {
+    $thumbsList = '<ul class="thumbs no-style">';
+    $plotHours = [
+      '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
+    ];
+    foreach ($plotHours as $plotHour) {
+      $li = sprintf('<li>
+          <a href="%s">
+            <img src="%s/data/%s/tn-%s" alt="spectrogram thumbnail for hour %s" />
+          </a>
+        </li>',
+        $plotHour,
+        $CONFIG['MOUNT_PATH'],
+        $set,
+        preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $file),
+        $plotHour
+      );
+      $thumbsList .= $li;
+    }
+    $thumbsList .= '</ul>';
+  }
+
+  $header = getHeaderComponents($date);
+
   // if no image, display 'no data' msg
-  if (file_exists($CONFIG['DATA_DIR'] . '/' . $file)) {
-    $img = '<img src="../../data/' . $file . '" alt="spectrogram thumbnail"
-      class="timespan-' . $timespan . ' spectrogram" />';
+  if (file_exists($CONFIG['DATA_DIR'] . '/' . $set . '/' . $file)) {
+    $img = sprintf('<img src="%s/data/%s/%s" alt="spectrogram plot"
+      class="timespan-%s spectrogram" />',
+      $CONFIG['MOUNT_PATH'],
+      $set,
+      $file,
+      $timespan
+    );
   } else {
     $img = '<p class="alert info">No data available</p>';
   }
 
-  $backLink = '<a href="../' . $id . '">Back to station ' . $instrument . '</a>';
-
+  $backLink = sprintf('<a href="%s/%s">Back to station %s</a>',
+    $CONFIG['MOUNT_PATH'],
+    $id,
+    $instrument
+  );
   $TITLETAG .= "Spectrograms | $subtitle - " . $header['title'];
 
   include 'template.inc.php';
@@ -73,6 +106,7 @@ if (!isset($TEMPLATE)) {
 </header>
 
 <?php print $img; ?>
+<?php print $thumbsList; ?>
 
 <p class="allstations"><a href="../<?php print $date; ?>">View spectrograms for
   all stations</a> &raquo;</p>

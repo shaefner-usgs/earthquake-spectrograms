@@ -23,14 +23,13 @@ if (!isset($TEMPLATE)) {
 
   function getImg ($date, $id, $instrument) {
     $imgDateStr = $date;
-    $file = sprintf('%s/tn-nc.%s_00.%s00.gif',
-      $GLOBALS['set'],
+    $file = sprintf('tn-nc.%s_00.%s00.gif',
       str_replace(' ', '_', $instrument),
       $imgDateStr
     );
 
     // If no image exists, display 'no data' msg
-    if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $file)) {
+    if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
       $img = sprintf('<a href="%d/%s">
           <img src="../data/%s" alt="spectrogram thumbnail" />
         </a>',
