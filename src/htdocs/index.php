@@ -35,7 +35,7 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
-$height = ceil($stations['count'] / 4) * 32;
+$height = ceil($stations['metadata']['count'] / 4) * 32;
 $stationsHtml = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 
 foreach ($stations['features'] as $feature) {
@@ -64,7 +64,7 @@ $stationsHtml .= '</ul>';
 <div class="map"></div>
 
 <h3 class="count">
-  <?php print $stations['count']; ?> stations on this map
+  <?php print $stations['metadata']['count']; ?> stations on this map
 </h3>
 
 <?php print $stationsHtml; ?>
