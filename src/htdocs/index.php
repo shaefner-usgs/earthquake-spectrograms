@@ -5,9 +5,14 @@ include_once '../lib/_functions.inc.php'; // app functions
 
 $timespan = safeParam('timespan', '24hr');
 
-$today = date('Ymd');
-
 if (!isset($TEMPLATE)) {
+  $set = 'nca';
+  $today = date('Ymd');
+
+  if ($timespan === '2hr') {
+    $set = 'nca2';
+  }
+
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
   $HEAD = '
@@ -17,7 +22,7 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $CONFIG['MOUNT_PATH'] . '",
-          SET = "nca",
+          SET = "' . $set . '",
           TIMESPAN = "' . $timespan . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
