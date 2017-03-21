@@ -10,6 +10,7 @@ $db = new Db;
 
 $date = safeParam('date');
 $id = safeParam('id');
+$timespan = safeParam('timespan', '24hr');
 
 // 'hardwire' for now
 $set = 'nca';
@@ -17,7 +18,7 @@ $set = 'nca';
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="css/spectrograms.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/spectrograms.css" />';
   $FOOT = '';
 
   function getImg ($date, $id, $instrument) {
@@ -31,7 +32,7 @@ if (!isset($TEMPLATE)) {
     // If no image exists, display 'no data' msg
     if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $file)) {
       $img = sprintf('<a href="%d/%s">
-          <img src="data/%s" alt="spectrogram thumbnail" />
+          <img src="../data/%s" alt="spectrogram thumbnail" />
         </a>',
         $id,
         $date,
@@ -74,7 +75,7 @@ if (!isset($TEMPLATE)) {
     $header = getHeaderComponents($date);
 
     // Query db to get a list of stations
-    $rsStations = $db->queryStations();
+    $rsStations = $db->queryStations($timespan);
 
     while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       $instrument = $row['site'] . ' ' . $row['type'] . ' ' . $row['network'] .
@@ -111,4 +112,5 @@ if (!isset($TEMPLATE)) {
 
 <?php print $listHtml; ?>
 
-<p class="back">&laquo; <a href="../spectrograms">Back to station list / map</a></p>
+<p class="back">&laquo; <a href="../<?php print $timespan; ?>">Back to station
+  list / map</a></p>

@@ -3,6 +3,8 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
+$timespan = safeParam('timespan', '24hr');
+
 $today = date('Ymd');
 
 if (!isset($TEMPLATE)) {
@@ -10,19 +12,20 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="spectrograms/css/index.css" />
+    <link rel="stylesheet" href="css/index.css" />
   ';
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $CONFIG['MOUNT_PATH'] . '",
-          SET = "nca";
+          SET = "nca",
+          TIMESPAN = "' . $timespan . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
-    <script src="spectrograms/js/index.js"></script>
+    <script src="js/index.js"></script>
   ';
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php');
+  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $timespan);
 
   include 'template.inc.php';
 }
@@ -36,8 +39,9 @@ foreach ($stations['features'] as $feature) {
     ' ' . $props['code'];
 
   $stationsHtml .= sprintf('<li>
-      <a href="spectrograms/%s/%s" title="View station">%s</a>
+      <a href="%s/%s/%s" title="View station">%s</a>
     </li>',
+    $timespan,
     $feature['id'],
     $today,
     $name
@@ -50,8 +54,7 @@ $stationsHtml .= '</ul>';
 
 <p>These spectrogram displays depict the frequency content of a seismogram as
   it changes with time, updated once per minute. Each plot represents 24 hours
-  of data from one station. <a href="/monitoring/spectrograms/about.php">Read
-  more</a> &raquo;</p>
+  of data from one station. <a href="about.php">Read more</a> &raquo;</p>
 
 <div class="map"></div>
 
@@ -61,5 +64,5 @@ $stationsHtml .= '</ul>';
 
 <?php print $stationsHtml; ?>
 
-<p>View <a href="spectrograms/<?php print $today; ?>">spectrograms for all
-  stations</a> &raquo;</p>
+<p>View <a href="<?php print $timespan; ?>/<?php print $today; ?>">spectrograms
+  for all stations</a> &raquo;</p>

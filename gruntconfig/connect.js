@@ -56,16 +56,24 @@ var connect = {
       redirect: 'permanent'
     },
     {
-      from: '^' + MOUNT_PATH + '/([0-9]+)/([0-9]{8}|latest)$',
-      to: '/spectrogram.php?id=$1&date=$2'
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8}|latest)/([0-9]{2})$',
+      to: '/spectrogram.php?timespan=$1&id=$2&date=$3&hour=$4'
     },
     {
-      from: '^' + MOUNT_PATH + '/([0-9]{8}|latest)$',
-      to: '/spectrograms.php?date=$1'
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8}|latest)$',
+      to: '/spectrogram.php?timespan=$1&id=$2&date=$3'
     },
     {
-      from: '^' + MOUNT_PATH + '/([0-9]+)$',
-      to: '/spectrograms.php?id=$1'
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]{8}|latest)$',
+      to: '/spectrograms.php?timespan=$1&date=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)$',
+      to: '/spectrograms.php?timespan=$1&id=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)$',
+      to: '/index.php?timespan=$1'
     },
     {
       from: '^' + MOUNT_PATH + '/?(.*)$',
@@ -80,7 +88,7 @@ var connect = {
       ],
       livereload: config.liveReloadPort,
       middleware: addMiddleware,
-      open: 'http://localhost:' + config.buildPort + MOUNT_PATH,
+      open: 'http://localhost:' + config.buildPort + MOUNT_PATH + '/24hr',
       port: config.buildPort
     }
   },
@@ -92,7 +100,7 @@ var connect = {
       ],
       port: config.distPort,
       keepalive: true,
-      open: 'http://localhost:' + config.distPort + MOUNT_PATH,
+      open: 'http://localhost:' + config.distPort + MOUNT_PATH + '/24hr',
       middleware: addMiddleware
     }
   },

@@ -46,10 +46,12 @@ function getHeaderComponents ($date) {
  *
  * @param $file {String}
  *     full path to json file to import (__DIR__ magic constant is useful)
+ * @param $timespan {String} default is NULL
+ *     type ('2hr' or '24hr') of spectrograms to display - filter for json results
  *
  * @return {Array} json file contents
  */
-function importJsonToArray ($file) {
+function importJsonToArray ($file, $timespan=NULL) {
   if (is_file($file)) {
     // Read file contents into output buffer
     ob_start();

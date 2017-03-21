@@ -1,4 +1,4 @@
-/* global L, MOUNT_PATH, SET */
+/* global L, MOUNT_PATH, SET, TIMESPAN */
 'use strict';
 
 
@@ -81,7 +81,7 @@ var StationsLayer = function (options) {
 
     img = '<p class="nodata">No data available</p>'; // default
     if (props.img) {
-      imgLink = MOUNT_PATH + '/' + feature.id + '/' + props.link;
+      imgLink = MOUNT_PATH + '/' + TIMESPAN + '/' + feature.id + '/' + props.link;
       imgSrc = MOUNT_PATH + '/data/' + SET + '/' + props.img;
       img = '<a href="' + imgLink + '"><img src="' + imgSrc + '" /></a>';
     }
@@ -89,7 +89,7 @@ var StationsLayer = function (options) {
     data = {
       description: props.name,
       img: img,
-      link: MOUNT_PATH + '/' + feature.id,
+      link: MOUNT_PATH + '/' + TIMESPAN + '/' + feature.id,
       name: name
     };
 

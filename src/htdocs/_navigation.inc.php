@@ -3,14 +3,19 @@
 $section = $CONFIG['MOUNT_PATH'];
 $url = $_SERVER['REQUEST_URI'];
 
-$matches_index = false;
-if (preg_match("@^$section(/index.php)?/?(\d+)?/?(latest|\d+)?$@", $url)) {
-  $matches_index = true;
+$matches2hr = false;
+if (preg_match("@^$section(/index.php)?/2hr/?(\d+)?/?(latest|\d+)?$@", $url)) {
+  $matches2hr = true;
+}
+$matches24hr = false;
+if (preg_match("@^$section(/index.php)?/24hr/?(\d+)?/?(latest|\d+)?$@", $url)) {
+  $matches24hr = true;
 }
 
 $NAVIGATION =
   navGroup('Spectrogram Displays',
-    navItem("$section", 'Spectrograms', $matches_index) .
+    navItem("$section/24hr", 'Daily Spectrograms', $matches24hr) .
+    navItem("$section/2hr", 'Bi-hourly Spectrograms', $matches2hr) .
     navItem("$section/about.php", 'About the Spectrograms') .
     navItem("$section/examples.php", 'Examples') .
     navItem("/monitoring/seismograms", 'Seismogram Displays')

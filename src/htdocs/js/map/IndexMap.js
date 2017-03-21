@@ -1,4 +1,4 @@
-/* global L, MOUNT_PATH */
+/* global L, MOUNT_PATH, TIMESPAN */
 'use strict';
 
 
@@ -164,7 +164,7 @@ var IndexMap = function (options) {
     // Remember user's map settings (selected layers, map extent)
     map.restoreMap({
       baseLayers: layers.baseLayers,
-      id: 'id',
+      id: TIMESPAN,
       overlays: layers.overlays,
       scope: 'Spectrograms',
       shareLayers: true
@@ -176,7 +176,7 @@ var IndexMap = function (options) {
    */
   _loadStationsLayer = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getStations.json.php',
+      url: MOUNT_PATH + '/_getStations.json.php?timespan=' + TIMESPAN,
       success: function (data) {
         _stations = L.stationsLayer({
           data: data

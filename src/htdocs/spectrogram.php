@@ -10,6 +10,7 @@ $db = new Db;
 
 $date = safeParam('date');
 $id = safeParam('id');
+$timespan = safeParam('timespan', '24hr');
 
 // 'hardwire' for now
 $set = 'nca';
@@ -17,7 +18,7 @@ $set = 'nca';
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/spectrogram.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../css/spectrogram.css" />';
   $FOOT = '';
 
   // Query db to get station details
@@ -46,7 +47,7 @@ if (!isset($TEMPLATE)) {
 
   // if no image, display 'no data' msg
   if (file_exists($CONFIG['DATA_DIR'] . '/' . $file)) {
-    $img = '<img src="../data/' . $file . '" alt="spectrogram thumbnail" />';
+    $img = '<img src="../../data/' . $file . '" alt="spectrogram thumbnail" />';
   } else {
     $img = '<p class="alert info">No data available</p>';
   }
