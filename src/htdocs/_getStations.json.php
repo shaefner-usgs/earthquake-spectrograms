@@ -45,22 +45,26 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
   $link = $today;
   $path = "{$CONFIG['DATA_DIR']}/$set_dir";
 
-  if (!file_exists("$path/$img")) {
-    if ($timespan === '2hr') { // check each valid hour; use most recent plot
-      $plotHours = [
-        '22', '20', '18', '16', '14', '12', '10', '08', '06', '04', '02', '00'
-      ];
-      foreach ($plotHours as $plotHour) {
-        if ($plotHour <= $currentHour) {
-          $img = preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $img);
-	  if (file_exists("$path/$img")) {
-	    $link .= "/$plotHour";
-            break 3;
-          }
+  // For bi-hourly, check each valid hour and use most recent plot
+  if ($timespan === '2hr') {
+    $plotHours = [
+      '22', '20', '18', '16', '14', '12', '10', '08', '06', '04', '02', '00'
+    ];
+    foreach ($plotHours as $plotHour) {
+      if ($plotHour <= $currentHour) {
+        $img = preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $img);
+        if (file_exists("$path/$img")) {
+          $link .= "/$plotHour";
+          break;
         }
       }
     }
+  }
 
+  // Set img / link to empty string if image not found
+  if (!file_exists("$path/$img")) {
+    $img = '';
+    $link = '';
   }
 
   $feature = [
