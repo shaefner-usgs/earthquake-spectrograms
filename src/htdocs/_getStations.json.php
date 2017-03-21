@@ -37,7 +37,7 @@ $output = [
   'metadata' => [
     'generated' => $now,
     'count' => $rsStations->rowCount(),
-    'title' => 'Spectrograms - ' . $timespan,
+    'title' => 'Earthquake Science Center Spectrograms - ' . $timespan,
     'url' => 'https://earthquake.usgs.gov' . $_SERVER['PHP_SELF'] . $qs
   ],
   'features' => []
@@ -71,7 +71,7 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     }
   }
 
-  // Set img / link to empty strings if image not found
+  // Set img / link to empty strings if plot not available
   if (!file_exists("$path/$img")) {
     $img = '';
     $link = '';
