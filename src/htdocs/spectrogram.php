@@ -10,8 +10,10 @@ $date = safeParam('date');
 $id = safeParam('id');
 $timespan = safeParam('timespan', '24hr');
 
-// 'hardwire' for now
 $set = 'nca';
+if ($timespan === '2hr') {
+  $set = 'nca2';
+}
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
