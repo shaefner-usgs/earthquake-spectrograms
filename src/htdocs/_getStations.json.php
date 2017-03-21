@@ -27,7 +27,7 @@ $output = [
 
 $currentHour = date('H');
 if ($timespan === '24hr') {
-  $hour = '00'; // all plots designated as '00' for hour column in file name
+  $hour = '00'; // all daily plots use '00' for hour column in file name
   $set_dir = 'nca';
 } else {
   $hour = $currentHour; // start with current hour for bi-hourly plots
@@ -77,13 +77,13 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     ],
     'id' => intval($row['id']),
     'properties' => [
-      'code' => $row['code'],
+      'code' => trim($row['code']),
       'img' => $img,
       'link' => $link,
-      'name' => $row['name'],
-      'network' => $row['network'],
-      'site' => $row['site'],
-      'type' => $row['type']
+      'name' => trim($row['name']),
+      'network' => trim($row['network']),
+      'site' => trim($row['site']),
+      'type' => trim($row['type'])
     ],
     'type' => 'Feature'
   ];
