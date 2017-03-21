@@ -69,5 +69,5 @@ $stationsHtml .= '</ul>';
 
 <?php print $stationsHtml; ?>
 
-<p>View <a href="<?php print $timespan; ?>/<?php print $today; ?>">spectrograms
+<p><a href="<?php print $timespan; ?>/<?php print $today; ?>">View spectrograms
   for all stations</a> &raquo;</p>
