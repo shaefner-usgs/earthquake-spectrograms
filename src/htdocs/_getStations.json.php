@@ -4,35 +4,45 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+// Don't cache
+$now = date(DATE_RFC2822);
+header('Cache-control: no-cache, must-revalidate');
+header("Expires: $now");
+
 $db = new Db;
 
 // when this script is called via importJsonToArray(), which is declared in
 // _functions.inc.php, $timespan is passed in as a function param
-if (!isset($timespan)) {
-  $timespan = safeParam('timespan', '24hr');
-}
+$timespan = safeParam('timespan', '24hr');
 
-$now = date(DATE_RFC2822);
+$currentHour = date('H');
+$rsStations = $db->queryStations($timespan);
 $today = date('Ymd');
 
-$rsStations = $db->queryStations($timespan);
+if ($timespan === '2hr') {
+  $hour = $currentHour; // start with current hour for bi-hourly plots
+  $set_dir = 'nca2';
+} else { // 24hr
+  $hour = '00'; // all daily plots use '00' for hour column in file name
+  $set_dir = 'nca';
+}
 
 // Initialize array template for json feed
+$qs = '';
+if ($_SERVER['QUERY_STRING']) {
+  $qs = '?' . $_SERVER['QUERY_STRING'];
+}
 $output = [
-  'generated' => $now,
-  'count' => $rsStations->rowCount(),
   'type' => 'FeatureCollection',
+  'metadata' => [
+    'generated' => $now,
+    'count' => $rsStations->rowCount(),
+    'title' => 'Spectrograms - ' . $timespan,
+    'url' => 'https://earthquake.usgs.gov' . $_SERVER['PHP_SELF'] . $qs
+  ],
   'features' => []
 ];
 
-$currentHour = date('H');
-if ($timespan === '24hr') {
-  $hour = '00'; // all daily plots use '00' for hour column in file name
-  $set_dir = 'nca';
-} else {
-  $hour = $currentHour; // start with current hour for bi-hourly plots
-  $set_dir = 'nca2';
-}
 while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
   $img = sprintf('tn-nc.%s_%s_%s_%s_00.%s%s.gif',
     $row['site'],
@@ -61,13 +71,15 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     }
   }
 
-  // Set img / link to empty string if image not found
+  // Set img / link to empty strings if image not found
   if (!file_exists("$path/$img")) {
     $img = '';
     $link = '';
   }
 
   $feature = [
+    'type' => 'Feature',
+    'id' => intval($row['id']),
     'geometry' => [
       'coordinates' => [
         floatval($row['lon']),
@@ -75,7 +87,6 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       ],
       'type' => 'Point'
     ],
-    'id' => intval($row['id']),
     'properties' => [
       'code' => trim($row['code']),
       'img' => $img,
@@ -84,10 +95,8 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       'network' => trim($row['network']),
       'site' => trim($row['site']),
       'type' => trim($row['type'])
-    ],
-    'type' => 'Feature'
+    ]
   ];
-
 
   array_push ($output['features'], $feature);
 }
