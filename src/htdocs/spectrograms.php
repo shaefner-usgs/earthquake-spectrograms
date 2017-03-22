@@ -21,35 +21,6 @@ if (!isset($TEMPLATE)) {
   $HEAD = '<link rel="stylesheet" href="../css/spectrograms.css" />';
   $FOOT = '';
 
-  function getImg ($date, $id, $instrument) {
-    $hour = ''; // default
-    if ($GLOBALS['timespan'] === '2hr') {
-      $hour = '/00';
-    }
-    $imgDateStr = $date;
-    $file = sprintf('tn-nc.%s_00.%s00.gif',
-      str_replace(' ', '_', $instrument),
-      $imgDateStr
-    );
-
-    // If no image exists, display 'no data' msg
-    if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
-      $img = sprintf('<a href="%d/%s%s">
-          <img src="../data/%s/%s" alt="spectrogram thumbnail" />
-        </a>',
-        $id,
-        $date,
-        $hour,
-        $GLOBALS['set'],
-        $file
-      );
-    } else {
-      $img = '<p class="nodata">No data available</p>';
-    }
-
-    return $img;
-  }
-
   $listHtml = '<ul class="stations no-style">';
 
   if ($id) { // show plots for a given station

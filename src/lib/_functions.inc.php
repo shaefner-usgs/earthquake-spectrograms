@@ -47,6 +47,44 @@ function getHeaderComponents ($date, $timespan=NULL) {
 }
 
 /**
+ * Get html for <img>, or return message (<p>) if img not found
+ *
+ * @param $date {Integer}
+ * @param $id {Integer}
+ * @param $instrument {String}
+ *
+ * @return $img {Html}
+ */
+function getImg ($date, $id, $instrument) {
+  $hour = ''; // default
+  if ($GLOBALS['timespan'] === '2hr') {
+    $hour = '/00';
+  }
+  $imgDateStr = $date;
+  $file = sprintf('tn-nc.%s_00.%s00.gif',
+    str_replace(' ', '_', $instrument),
+    $imgDateStr
+  );
+
+  // If no image exists, display 'no data' msg
+  if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
+    $img = sprintf('<a href="%d/%s%s">
+        <img src="../data/%s/%s" alt="spectrogram thumbnail" />
+      </a>',
+      $id,
+      $date,
+      $hour,
+      $GLOBALS['set'],
+      $file
+    );
+  } else {
+    $img = '<p class="nodata">No data available</p>';
+  }
+
+  return $img;
+}
+
+/**
  * Import dynamically generated json file and store it in an array
  *
  * @param $file {String}
