@@ -4,11 +4,11 @@ $section = $CONFIG['MOUNT_PATH'];
 $url = $_SERVER['REQUEST_URI'];
 
 $matches2hr = false;
-if (preg_match("@^$section(/index.php)?/2hr/?(\d+)?/?(latest|\d+)?$@", $url)) {
+if (preg_match("@^$section(/index.php)?/2hr(.*)?$@", $url)) {
   $matches2hr = true;
 }
 $matches24hr = false;
-if (preg_match("@^$section(/index.php)?/24hr/?(\d+)?/?(latest|\d+)?$@", $url)) {
+if (preg_match("@^$section(/index.php)?/24hr(.*)?$@", $url)) {
   $matches24hr = true;
 }
 
