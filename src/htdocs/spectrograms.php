@@ -22,6 +22,10 @@ if (!isset($TEMPLATE)) {
   $FOOT = '';
 
   function getImg ($date, $id, $instrument) {
+    $hour = ''; // default
+    if ($GLOBALS['timespan'] === '2hr') {
+      $hour = '/00';
+    }
     $imgDateStr = $date;
     $file = sprintf('tn-nc.%s_00.%s00.gif',
       str_replace(' ', '_', $instrument),
@@ -30,11 +34,12 @@ if (!isset($TEMPLATE)) {
 
     // If no image exists, display 'no data' msg
     if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
-      $img = sprintf('<a href="%d/%s">
+      $img = sprintf('<a href="%d/%s%s">
           <img src="../data/%s/%s" alt="spectrogram thumbnail" />
         </a>',
         $id,
         $date,
+        $hour,
         $GLOBALS['set'],
         $file
       );

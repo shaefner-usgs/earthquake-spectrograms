@@ -8,7 +8,7 @@
  *
  * @return {Array}
  */
-function getHeaderComponents ($date) {
+function getHeaderComponents ($date, $timespan=NULL) {
   $cutoffDate = date('Ymd', strtotime('-14 days'));
   $time = strtotime($date);
   $today = date('Ymd');
@@ -19,6 +19,11 @@ function getHeaderComponents ($date) {
   $prevHref = date('Ymd', strtotime('-1 day', $time));
   $prevLink = '';
   $title = date('D M j, Y', $time);
+
+  if ($timespan === '2hr') {
+    $nextHref = "../$nextHref/00";
+    $prevHref = "../$prevHref/00";
+  }
 
   if ($date === $cutoffDate) {
     $prevHref = '';
