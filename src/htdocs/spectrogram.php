@@ -18,6 +18,8 @@ if (!isset($TEMPLATE)) {
     '/css/spectrogram.css" />';
   $FOOT = '';
 
+  $set = 'nca'; // default
+
   // Query db to get station details
   $rsStation = $db->queryStation($id);
 
@@ -32,43 +34,13 @@ if (!isset($TEMPLATE)) {
     return;
   }
 
-  $set = 'nca';
-  if ($timespan === '2hr') {
-    $set = 'nca2';
-  }
-
-  // spectrogram plot
+  // Spectrogram plot
   $imgDateStr = $date;
   $file = sprintf('nc.%s_00.%s%s.gif',
     str_replace(' ', '_', $instrument),
     $imgDateStr,
     $hour
   );
-
-  // Create thumbnails if viewing 2hr plots
-  if ($timespan === '2hr') {
-    $thumbsList = '<ul class="thumbs no-style">';
-    $plotHours = [
-      '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
-    ];
-    foreach ($plotHours as $plotHour) {
-      $li = sprintf('<li>
-          <a href="%s">
-            <img src="%s/data/%s/tn-%s" alt="spectrogram thumbnail for hour %s" />
-          </a>
-        </li>',
-        $plotHour,
-        $CONFIG['MOUNT_PATH'],
-        $set,
-        preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $file),
-        $plotHour
-      );
-      $thumbsList .= $li;
-    }
-    $thumbsList .= '</ul>';
-  }
-
-  $header = getHeaderComponents($date, $timespan);
 
   // if no image, display 'no data' msg
   if (file_exists($CONFIG['DATA_DIR'] . '/' . $set . '/' . $file)) {
@@ -82,6 +54,35 @@ if (!isset($TEMPLATE)) {
   } else {
     $img = '<p class="alert info">No data available</p>';
   }
+
+  // Create thumbnails if viewing 2hr plots
+  if ($timespan === '2hr') {
+    $plotHours = [
+      '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
+    ];
+    $set = 'nca2';
+    $thumbsList = '<ul class="thumbs no-style">';
+
+    foreach ($plotHours as $plotHour) {
+      $li = sprintf('<li>
+          <h4>%s:00</h4>
+          <a href="%s">
+            <img src="%s/data/%s/tn-%s" alt="spectrogram thumbnail for hour %s" />
+          </a>
+        </li>',
+        $plotHour,
+        $plotHour,
+        $CONFIG['MOUNT_PATH'],
+        $set,
+        preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $file),
+        $plotHour
+      );
+      $thumbsList .= $li;
+    }
+    $thumbsList .= '</ul>';
+  }
+
+  $header = getHeaderComponents($date, $timespan);
 
   $allLink = sprintf('<a href="%s/%s/%s">View spectrograms for all stations</a>',
     $CONFIG['MOUNT_PATH'],
