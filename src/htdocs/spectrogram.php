@@ -68,7 +68,7 @@ if (!isset($TEMPLATE)) {
     $thumbsList .= '</ul>';
   }
 
-  $header = getHeaderComponents($date);
+  $header = getHeaderComponents($date, $timespan);
 
   // if no image, display 'no data' msg
   if (file_exists($CONFIG['DATA_DIR'] . '/' . $set . '/' . $file)) {
@@ -83,8 +83,14 @@ if (!isset($TEMPLATE)) {
     $img = '<p class="alert info">No data available</p>';
   }
 
-  $backLink = sprintf('<a href="%s/%s">Back to station %s</a>',
+  $allLink = sprintf('<a href="%s/%s/%s">View spectrograms for all stations</a>',
     $CONFIG['MOUNT_PATH'],
+    $timespan,
+    $date
+  );
+  $backLink = sprintf('<a href="%s/%s/%s">Back to station %s</a>',
+    $CONFIG['MOUNT_PATH'],
+    $timespan,
     $id,
     $instrument
   );
@@ -108,7 +114,5 @@ if (!isset($TEMPLATE)) {
 <?php print $img; ?>
 <?php print $thumbsList; ?>
 
-<p class="allstations"><a href="../<?php print $date; ?>">View spectrograms for
-  all stations</a> &raquo;</p>
-
+<p class="allstations"><?php print $allLink; ?> &raquo;</p>
 <p class="back">&laquo; <?php print $backLink;?></p>
