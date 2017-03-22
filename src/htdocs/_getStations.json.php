@@ -11,9 +11,15 @@ header("Expires: $now");
 
 $db = new Db;
 
-// when this script is called via importJsonToArray(), which is declared in
-// _functions.inc.php, $timespan is passed in as a function param
-$timespan = safeParam('timespan', '24hr');
+/* This script is called via js (as an ajax request) or php (using
+ * importJsonToArray(), which is declared in _functions.inc.php).
+ *
+ * - js mode: $timespan is set via querystring
+ * - php mode: $timespan is set before including this script
+ */
+if (!isset($timespan)) {
+  $timespan = safeParam('timespan', '24hr');
+}
 
 $currentHour = date('H');
 $rsStations = $db->queryStations($timespan);
@@ -53,7 +59,8 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     $hour
   );
   $link = $today;
-  $path = "{$CONFIG['DATA_DIR']}/$set";
+  // Must use global var b/c this script is called via a function in 'php mode'
+  $path = "{$GLOBALS['CONFIG']['DATA_DIR']}/$set";
 
   // For bi-hourly, check each valid hour and use most recent plot
   if ($timespan === '2hr') {
