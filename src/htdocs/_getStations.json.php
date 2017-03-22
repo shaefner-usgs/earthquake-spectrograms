@@ -21,10 +21,10 @@ $today = date('Ymd');
 
 if ($timespan === '2hr') {
   $hour = $currentHour; // start with current hour for bi-hourly plots
-  $set_dir = 'nca2';
+  $set = 'nca2';
 } else { // 24hr
   $hour = '00'; // all daily plots use '00' for hour column in file name
-  $set_dir = 'nca';
+  $set = 'nca';
 }
 
 // Initialize array template for json feed
@@ -53,7 +53,7 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     $hour
   );
   $link = $today;
-  $path = "{$CONFIG['DATA_DIR']}/$set_dir";
+  $path = "{$CONFIG['DATA_DIR']}/$set";
 
   // For bi-hourly, check each valid hour and use most recent plot
   if ($timespan === '2hr') {
