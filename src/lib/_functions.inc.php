@@ -55,7 +55,7 @@ function getHeaderComponents ($date, $timespan=NULL) {
  *
  * @return $img {Html}
  */
-function getImg ($date, $id, $instrument) {
+function getThumb ($date, $id, $instrument) {
   $hour = ''; // default
   if ($GLOBALS['timespan'] === '2hr') {
     $hour = '/00';

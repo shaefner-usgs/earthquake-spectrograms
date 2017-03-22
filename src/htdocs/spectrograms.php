@@ -42,7 +42,7 @@ if (!isset($TEMPLATE)) {
     for ($i = 0; $i < 15; $i ++) {
       $date = date('Ymd', strtotime('-' . $i . ' day'));
       $imgTitle = date('M j, Y', strtotime($date));
-      $img = getImg($date, $id, $instrument);
+      $img = getThumb($date, $id, $instrument);
 
       $listHtml .= "<li><h3>$imgTitle</h3>$img</li>";
     }
@@ -56,7 +56,7 @@ if (!isset($TEMPLATE)) {
     while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       $instrument = $row['site'] . ' ' . $row['type'] . ' ' . $row['network'] .
         ' ' . $row['code'];
-      $img = getImg($date, $row['id'], $instrument);
+      $img = getThumb($date, $row['id'], $instrument);
 
       $listHtml .= "<li><h3>$instrument</h3>$img</li>";
     }
