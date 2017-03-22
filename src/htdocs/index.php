@@ -32,8 +32,6 @@ if (!isset($TEMPLATE)) {
   // importJsonToArray() sets headers -> needs to run before including template
   $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $timespan);
 
-  print_r($stations);
-
   include 'template.inc.php';
 }
 
