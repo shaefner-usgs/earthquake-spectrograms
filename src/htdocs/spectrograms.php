@@ -31,10 +31,11 @@ if (!isset($TEMPLATE)) {
     // If no image exists, display 'no data' msg
     if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
       $img = sprintf('<a href="%d/%s">
-          <img src="../data/%s" alt="spectrogram thumbnail" />
+          <img src="../data/%s/%s" alt="spectrogram thumbnail" />
         </a>',
         $id,
         $date,
+        $GLOBALS['set'],
         $file
       );
     } else {
