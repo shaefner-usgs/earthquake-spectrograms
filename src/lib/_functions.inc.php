@@ -55,10 +55,9 @@ function getHeaderComponents ($date, $timespan=NULL) {
  *
  * @return $img {Html}
  */
-function getThumb ($date, $id, $instrument) {
-  $hour = ''; // default
-  if ($GLOBALS['timespan'] === '2hr') {
-    $hour = '/00';
+function getThumb ($date, $id, $instrument, $hour=NULL) {
+  if ($hour) {
+    $hour = "/$hour"; // add leading slash for appending to href
   }
   $imgDateStr = $date;
   $file = sprintf('tn-nc.%s_00.%s00.gif',
@@ -68,12 +67,15 @@ function getThumb ($date, $id, $instrument) {
 
   // If no image exists, display 'no data' msg
   if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
-    $img = sprintf('<a href="%d/%s%s">
-        <img src="../data/%s/%s" alt="spectrogram thumbnail" />
+    $img = sprintf('<a href="%s/%s/%d/%s%s">
+        <img src="%s/data/%s/%s" alt="spectrogram thumbnail" />
       </a>',
+      $GLOBALS['CONFIG']['MOUNT_PATH'],
+      $GLOBALS['timespan'],
       $id,
       $date,
       $hour,
+      $GLOBALS['CONFIG']['MOUNT_PATH'],
       $GLOBALS['set'],
       $file
     );
