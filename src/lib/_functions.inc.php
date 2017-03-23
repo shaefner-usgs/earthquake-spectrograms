@@ -47,43 +47,59 @@ function getHeaderComponents ($date, $timespan=NULL) {
 }
 
 /**
- * Get html for <img>, or return message (<p>) if img not found
+ * Get html for thumbnail img, link (return <p>no data msg</p> if img not found)
  *
- * @param $date {Integer}
+ * @param $date {Integer} 8 digits
  * @param $id {Integer}
  * @param $instrument {String}
+ * @param $hour {Integer} 2 digits
  *
- * @return $img {Html}
+ * @return $thumb {Html}
  */
 function getThumb ($date, $id, $instrument, $hour=NULL) {
-  if ($hour) {
-    $hour = "/$hour"; // add leading slash for appending to href
+  // Set defaults (daily plots)
+  $hourHref = '';
+  $set = 'nca';
+  $timespan = '24hr';
+
+  if ($hour) { // assume bi-hourly plots if $hour param passed in
+    $hourHref = "/$hour"; // add leading slash for appending to href
+    $set = 'nca2';
+    $timespan = '2hr';
+  } else {
+    $hour = '00'; // daily plots designated with '00' in hour column
   }
-  $imgDateStr = $date;
-  $file = sprintf('tn-nc.%s_00.%s00.gif',
+
+  $img = sprintf('tn-nc.%s_00.%s%s.gif',
     str_replace(' ', '_', $instrument),
-    $imgDateStr
+    $date,
+    $hour
+  );
+  $imgPath = sprintf('%s/%s/%s',
+    $GLOBALS['CONFIG']['DATA_DIR'],
+    $set,
+    $img
   );
 
   // If no image exists, display 'no data' msg
-  if (file_exists($GLOBALS['CONFIG']['DATA_DIR'] . '/' . $GLOBALS['set'] . '/' . $file)) {
-    $img = sprintf('<a href="%s/%s/%d/%s%s">
+  if (file_exists($imgPath)) {
+    $thumb = sprintf('<a href="%s/%s/%d/%s%s">
         <img src="%s/data/%s/%s" alt="spectrogram thumbnail" />
       </a>',
       $GLOBALS['CONFIG']['MOUNT_PATH'],
-      $GLOBALS['timespan'],
+      $timespan,
       $id,
       $date,
-      $hour,
+      $hourHref,
       $GLOBALS['CONFIG']['MOUNT_PATH'],
-      $GLOBALS['set'],
-      $file
+      $set,
+      $img
     );
   } else {
-    $img = '<p class="nodata">No data available</p>';
+    $thumb = '<p class="nodata">No data available</p>';
   }
 
-  return $img;
+  return $thumb;
 }
 
 /**
