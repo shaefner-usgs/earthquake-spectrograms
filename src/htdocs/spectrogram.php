@@ -18,8 +18,6 @@ if (!isset($TEMPLATE)) {
     '/css/spectrogram.css" />';
   $FOOT = '';
 
-  $set = 'nca'; // default
-
   // Query db to get station details
   $rsStation = $db->queryStation($id);
 
@@ -35,12 +33,26 @@ if (!isset($TEMPLATE)) {
   }
 
   // Spectrogram plot
-  $imgDateStr = $date;
   $file = sprintf('nc.%s_00.%s%s.gif',
     str_replace(' ', '_', $instrument),
-    $imgDateStr,
+    $date,
     $hour
   );
+
+  // Create thumbnails if viewing 2hr plots
+  if ($timespan === '2hr') {
+    $plotHours = [
+      '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
+    ];
+    $set = 'nca2';
+    $thumbsList = '<ul class="thumbs no-style">';
+
+    foreach ($plotHours as $plotHour) {
+      $thumb = getThumb($date, $row['id'], $instrument, $plotHour);
+      $thumbsList .= "<li><h4>$plotHour:00</h4>$thumb</li>";
+    }
+    $thumbsList .= '</ul>';
+  }
 
   // if no image, display 'no data' msg
   if (file_exists($CONFIG['DATA_DIR'] . '/' . $set . '/' . $file)) {
@@ -55,35 +67,6 @@ if (!isset($TEMPLATE)) {
     $img = '<p class="alert info">No data available</p>';
   }
 
-  // Create thumbnails if viewing 2hr plots
-  if ($timespan === '2hr') {
-    $plotHours = [
-      '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
-    ];
-    $set = 'nca2';
-    $thumbsList = '<ul class="thumbs no-style">';
-
-    foreach ($plotHours as $plotHour) {
-      $li = sprintf('<li>
-          <h4>%s:00</h4>
-          <a href="%s">
-            <img src="%s/data/%s/tn-%s" alt="spectrogram thumbnail for hour %s" />
-          </a>
-        </li>',
-        $plotHour,
-        $plotHour,
-        $CONFIG['MOUNT_PATH'],
-        $set,
-        preg_replace('/\d{2}\.gif$/', "$plotHour.gif", $file),
-        $plotHour
-      );
-      $thumbsList .= $li;
-    }
-    $thumbsList .= '</ul>';
-  }
-
-  $header = getHeaderComponents($date, $timespan);
-
   $allLink = sprintf('<a href="%s/%s/%s">View spectrograms for all stations</a>',
     $CONFIG['MOUNT_PATH'],
     $timespan,
@@ -95,6 +78,8 @@ if (!isset($TEMPLATE)) {
     $id,
     $instrument
   );
+
+  $header = getHeaderComponents($date, $timespan);
   $TITLETAG .= "Spectrograms | $subtitle - " . $header['title'];
 
   include 'template.inc.php';
