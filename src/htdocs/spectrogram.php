@@ -50,8 +50,16 @@ if (!isset($TEMPLATE)) {
     $thumbsList = '<ul class="thumbs no-style">';
 
     foreach ($plotHours as $plotHour) {
+      $cssClass = '';
+      if ($plotHour === $hour) {
+        $cssClass = ' class="selected"';
+      }
       $thumb = getThumb($date, $row['id'], $instrument, $plotHour);
-      $thumbsList .= "<li><h4>$plotHour:00</h4>$thumb</li>";
+      $thumbsList .= sprintf('<li%s><h4>%s:00</h4>%s</li>',
+        $cssClass,
+        $plotHour,
+        $thumb
+      );
     }
     $thumbsList .= '</ul>';
   }
@@ -99,8 +107,10 @@ if (!isset($TEMPLATE)) {
   </ul>
 </header>
 
-<?php print $img; ?>
-<?php print $thumbsList; ?>
+<div class="plots">
+  <?php print $img; ?>
+  <?php print $thumbsList; ?>
+</div>
 
 <p class="allstations"><?php print $allLink; ?> &raquo;</p>
 <p class="back">&laquo; <?php print $backLink;?></p>

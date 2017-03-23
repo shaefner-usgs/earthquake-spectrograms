@@ -4,7 +4,37 @@ h2 {
   margin-top: 0;
 }
 
-.timespan-24hr {
+.plots {
+  overflow: auto;
+}
+
+.spectrogram {
   display: block;
-  margin: 0 auto;
+
+  &.timespan-2hr {
+    float: left;
+  }
+  &.timespan-24hr {
+    margin: 0 auto;
+  }
+}
+
+.thumbs {
+  display: flex;
+  flex-flow: row wrap;
+
+  h4 {
+    margin-top: 0;
+  }
+  li {
+    border: 2px solid transparent;
+    margin: 0 .5em;
+    padding: 2px 4px;
+    text-align: center;
+    width: 150px;
+
+    &.selected {
+      border-color: #0c0;
+    }
+  }
 }
