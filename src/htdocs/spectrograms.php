@@ -10,16 +10,16 @@ $date = safeParam('date');
 $id = safeParam('id');
 $timespan = safeParam('timespan', '24hr');
 
-$set = 'nca';
-if ($timespan === '2hr') {
-  $set = 'nca2';
-}
-
 if (!isset($TEMPLATE)) {
   $TITLE = 'Real-time Spectrogram Displays';
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/spectrograms.css" />';
   $FOOT = '';
+
+  $hour = NULL;
+  if ($timespan === '2hr') {
+    $hour = '00'; // show first bi-hourly plot of the day
+  }
 
   $listHtml = '<ul class="stations no-style">';
 
@@ -41,14 +41,13 @@ if (!isset($TEMPLATE)) {
     // Loop thru past 15 days
     for ($i = 0; $i < 15; $i ++) {
       $date = date('Ymd', strtotime('-' . $i . ' day'));
-      $imgTitle = date('M j, Y', strtotime($date));
-      $img = getThumb($date, $id, $instrument);
-
-      $listHtml .= "<li><h3>$imgTitle</h3>$img</li>";
+      $thumb = getThumb($date, $id, $instrument, $hour);
+      $thumbTitle = date('M j, Y', strtotime($date));
+      $listHtml .= "<li><h3>$thumbTitle</h3>$thumb</li>";
     }
   } else { // show plots for all stations on a given date
-    $subtitle = 'All Stations';
     $header = getHeaderComponents($date);
+    $subtitle = 'All Stations';
 
     // Query db to get a list of stations
     $rsStations = $db->queryStations($timespan);
@@ -56,9 +55,8 @@ if (!isset($TEMPLATE)) {
     while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       $instrument = $row['site'] . ' ' . $row['type'] . ' ' . $row['network'] .
         ' ' . $row['code'];
-      $img = getThumb($date, $row['id'], $instrument);
-
-      $listHtml .= "<li><h3>$instrument</h3>$img</li>";
+      $thumb = getThumb($date, $row['id'], $instrument, $hour);
+      $listHtml .= "<li><h3>$instrument</h3>$thumb</li>";
     }
   }
 
