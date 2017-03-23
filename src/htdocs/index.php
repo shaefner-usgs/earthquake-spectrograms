@@ -59,6 +59,11 @@ foreach ($stations['features'] as $feature) {
 
 $stationsHtml .= '</ul>';
 
+$allLink = sprintf('<a href="%s/%s">View spectrograms for all stations</a>',
+  $timespan,
+  $today
+);
+
 ?>
 
 <p>These spectrogram displays depict the frequency content of a seismogram as
@@ -73,5 +78,4 @@ $stationsHtml .= '</ul>';
 
 <?php print $stationsHtml; ?>
 
-<p><a href="<?php print $timespan; ?>/<?php print $today; ?>">View spectrograms
-  for all stations</a> &raquo;</p>
+<p class="allstations"><?php print $allLink; ?> &raquo;</p>
