@@ -42,17 +42,12 @@ foreach ($stations['features'] as $feature) {
   $props = $feature['properties'];
   $name = $props['site'] . ' ' . $props['type'] . ' ' . $props['network'] .
     ' ' . $props['code'];
-  $link = "$today/00"; // default
-  if ($props['link'] !== '') {
-    $link = $props['link'];
-  }
 
   $stationsHtml .= sprintf('<li>
-      <a href="%s/%s/%s" title="View station">%s</a>
+      <a href="%s/%s" title="View station">%s</a>
     </li>',
     $timespan,
     $feature['id'],
-    $link,
     $name
   );
 }
