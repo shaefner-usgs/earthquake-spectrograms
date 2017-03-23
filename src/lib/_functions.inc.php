@@ -47,12 +47,39 @@ function getHeaderComponents ($date, $timespan=NULL) {
 }
 
 /**
- * Get html for thumbnail img, link (return <p>no data msg</p> if img not found)
+ * Get filename for plot
+ *
+ * @param $date {Integer} 8 digits
+ * @param $hour {Integer} 2 digits
+ * @param $instrument {String}
+ * @param $set {String}
+ *
+ * @return $img {String}
+ */
+function getPlotFile ($date, $hour, $instrument, $set) {
+  $img = sprintf('tn-nc.%s_00.%s%s.gif',
+    str_replace(' ', '_', $instrument),
+    $date,
+    $hour
+  );
+  $imgFullPath = sprintf('%s/%s/%s',
+    $GLOBALS['CONFIG']['DATA_DIR'],
+    $set,
+    $img
+  );
+
+  if (file_exists($imgFullPath)) {
+    return $img;
+  }
+}
+
+/**
+ * Get html for thumbnail img/link (return "no data" message if img not found)
  *
  * @param $date {Integer} 8 digits
  * @param $id {Integer}
  * @param $instrument {String}
- * @param $hour {Integer} 2 digits
+ * @param $hour {Integer} optional, 2 digits
  *
  * @return $thumb {Html}
  */
@@ -69,20 +96,9 @@ function getThumb ($date, $id, $instrument, $hour=NULL) {
   } else {
     $hour = '00'; // daily plots designated with '00' in hour column
   }
+  $plotFile = getPlotFile($date, $hour, $instrument, $set);
 
-  $img = sprintf('tn-nc.%s_00.%s%s.gif',
-    str_replace(' ', '_', $instrument),
-    $date,
-    $hour
-  );
-  $imgPath = sprintf('%s/%s/%s',
-    $GLOBALS['CONFIG']['DATA_DIR'],
-    $set,
-    $img
-  );
-
-  // If no image exists, display 'no data' msg
-  if (file_exists($imgPath)) {
+  if ($plotFile) {
     $thumb = sprintf('<a href="%s/%s/%d/%s%s">
         <img src="%s/data/%s/%s" alt="spectrogram thumbnail" />
       </a>',
@@ -93,9 +109,9 @@ function getThumb ($date, $id, $instrument, $hour=NULL) {
       $hourHref,
       $GLOBALS['CONFIG']['MOUNT_PATH'],
       $set,
-      $img
+      $plotFile
     );
-  } else {
+  } else { // if image not found, display 'no data' msg
     $thumb = '<p class="nodata">No data available</p>';
   }
 
