@@ -32,6 +32,8 @@ if (!isset($TEMPLATE)) {
     return;
   }
 
+  $set = 'nca'; // default
+
   // Spectrogram plot
   $file = sprintf('nc.%s_00.%s%s.gif',
     str_replace(' ', '_', $instrument),
