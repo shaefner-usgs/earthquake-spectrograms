@@ -5,6 +5,8 @@
  *
  * @param $date {Integer}
  *     Ymd date, e.g. 20170223
+ * @param $timespan {String} optional
+ *     '2hr' or '24hr'
  *
  * @return {Array}
  */
