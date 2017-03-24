@@ -56,15 +56,15 @@ var connect = {
       redirect: 'permanent'
     },
     {
-      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8}|latest)/([0-9]{2})$',
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8})/([0-9]{2})$',
       to: '/spectrogram.php?timespan=$1&id=$2&date=$3&hour=$4'
     },
     {
-      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8}|latest)$',
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]+)/([0-9]{8})$',
       to: '/spectrogram.php?timespan=$1&id=$2&date=$3'
     },
     {
-      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]{8}|latest)$',
+      from: '^' + MOUNT_PATH + '/(2hr|24hr)/([0-9]{8})$',
       to: '/spectrograms.php?timespan=$1&date=$2'
     },
     {
