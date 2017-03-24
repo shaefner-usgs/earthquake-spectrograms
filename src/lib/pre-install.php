@@ -69,15 +69,22 @@ file_put_contents($HTTPD_CONF, '
     $MOUNT_PATH . '$1 [L,R=301]
 
   # Prevent apache from adding trailing slash on "real" directories by explicitly requesting index.php
-  RewriteRule ^' . $MOUNT_PATH . '$ ' . $MOUNT_PATH . '/index.php [L,PT]
+  # RewriteRule ^' . $MOUNT_PATH . '$ ' . $MOUNT_PATH . '/index.php [L,PT]
+
+  # 24hr (daily) spectrograms are the default page for the app
+  RewriteRule ^' . $MOUNT_PATH . '$ ' . $MOUNT_PATH . '/24hr [L,R=301]
 
   # Pretty URLs
-  RewriteRule ^' . $MOUNT_PATH . '/([0-9]+)/([0-9]{8}|latest)$ ' .
-    $MOUNT_PATH . '/spectrogram.php?id=$1&date=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([0-9]{8}|latest)$ ' .
-    $MOUNT_PATH . '/spectrograms.php?date=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([0-9]+)$ ' .
-    $MOUNT_PATH . '/spectrograms.php?id=$1 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/(2hr|24hr)/([0-9]+)/([0-9]{8})/([0-9]{2})$ ' .
+    $MOUNT_PATH . '/spectrogram.php?timespan=$1&id=$2&date=$3&hour=$4 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/(2hr|24hr)/([0-9]+)/([0-9]{8})$ ' .
+    $MOUNT_PATH . '/spectrogram.php?timespan=$1&id=$2&date=$3 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/(2hr|24hr)/([0-9]{8})$ ' .
+    $MOUNT_PATH . '/spectrograms.php?timespan=$1&date=$2 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/(2hr|24hr)/([0-9]+)$ ' .
+    $MOUNT_PATH . '/spectrograms.php?timespan=$1&id=$2 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/(2hr|24hr)$ ' .
+    $MOUNT_PATH . '/index.php?timespan=$1 [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny
