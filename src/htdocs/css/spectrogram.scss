@@ -5,31 +5,37 @@ h2 {
 }
 
 .plots {
-  overflow: auto;
+  display: flex;
+  flex-flow: row wrap;
+
+  .fullsize {
+    flex-grow: 0;
+    flex-shrink: 1;
+  }
+  .thumbs {
+    flex: 1 0 0;
+  }
 }
 
 .spectrogram {
   display: block;
 
-  &.timespan-2hr {
-    float: left;
-  }
   &.timespan-24hr {
     margin: 0 auto;
   }
 }
 
-.thumbs {
+.thumbs ul {
   display: flex;
   flex-flow: row wrap;
 
   h4 {
-    margin-top: 0;
+    margin: 0;
   }
   li {
     border: 2px solid transparent;
-    margin: 0 .5em;
-    padding: 2px 4px;
+    margin: 0 0 0 .5em;
+    padding: 2px 4px 0px 4px;
     text-align: center;
     width: 150px;
 

@@ -34,20 +34,14 @@ if (!isset($TEMPLATE)) {
 
   $set = 'nca'; // default
 
-  // Spectrogram plot
-  $file = sprintf('nc.%s_00.%s%s.gif',
-    str_replace(' ', '_', $instrument),
-    $date,
-    $hour
-  );
-
-  // Create thumbnails if viewing 2hr plots
+  // Create html for thumbnails (if viewing 2hr plots)
+  $thumbsList = '';
   if ($timespan === '2hr') {
     $plotHours = [
       '00', '02', '04', '06', '08', '10', '12', '14', '16', '18', '20', '22'
     ];
     $set = 'nca2';
-    $thumbsList = '<ul class="thumbs no-style">';
+    $thumbsList = '<ul class="no-style">';
 
     foreach ($plotHours as $plotHour) {
       $cssClass = '';
@@ -64,17 +58,50 @@ if (!isset($TEMPLATE)) {
     $thumbsList .= '</ul>';
   }
 
+  // Spectrogram plot
+  $file = sprintf('nc.%s_00.%s%s.gif',
+    str_replace(' ', '_', $instrument),
+    $date,
+    $hour
+  );
+  // Plot w/ full path
+  $filename = sprintf('%s/%s/%s',
+    $CONFIG['DATA_DIR'],
+    $set,
+    $file
+  );
+
   // if no image, display 'no data' msg
-  if (file_exists($CONFIG['DATA_DIR'] . '/' . $set . '/' . $file)) {
+  if (file_exists($filename)) {
     $img = sprintf('<img src="%s/data/%s/%s" alt="spectrogram plot"
-      class="timespan-%s spectrogram" />',
+      class="spectrogram timespan-%s" />',
       $CONFIG['MOUNT_PATH'],
       $set,
       $file,
       $timespan
     );
+    $imgSize = getimagesize($filename);
+    $imgWidth = $imgSize[0] . 'px'; // width of full-size plot
   } else {
-    $img = '<p class="alert info">No data available</p>';
+    $img = '<p class="alert info">' . $hour . ':00 - no data available</p>';
+    $imgWidth = '50%'; // width of alert
+  }
+
+  // Create html for plot(s)
+  if ($thumbsList) {
+    $plots = sprintf('<div class="fullsize" style="flex-basis: %s">
+          %s
+        </div>
+        <div class="thumbs">
+          %s
+        </div>
+      </div>',
+      $imgWidth,
+      $img,
+      $thumbsList
+    );
+  } else {
+    $plots = $img;
   }
 
   $allLink = sprintf('<a href="%s/%s/%s">View spectrograms for all stations</a>',
@@ -108,8 +135,7 @@ if (!isset($TEMPLATE)) {
 </header>
 
 <div class="plots">
-  <?php print $img; ?>
-  <?php print $thumbsList; ?>
+  <?php print $plots; ?>
 </div>
 
 <p class="allstations"><?php print $allLink; ?> &raquo;</p>
