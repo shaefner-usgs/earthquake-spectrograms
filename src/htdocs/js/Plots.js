@@ -60,19 +60,26 @@ var Plots = function (options) {
   _initSwap = function (e) {
     var fullsize,
         newImgSrc,
+        spinnerImg,
         thumb;
 
     fullsize = _el.querySelector('.fullsize img');
 
+    // Add check b/c <img> doesn't exist if 'no data'; just follow link w/o js
     if (fullsize) {
-      fullsize.setAttribute('src', '../../../img/spinner.gif');
-      fullsize.classList.add('spinner');
+      spinnerImg = document.createElement('img');
+      spinnerImg.setAttribute('src', '../../../img/spinner.gif');
+      spinnerImg.classList.add('spinner');
 
       thumb = this.querySelector('img');
       newImgSrc = thumb.getAttribute('src').replace('/tn-', '/');
 
+      // Hide plot and add spinner
+      fullsize.classList.add('loading');
+      fullsize.parentNode.appendChild(spinnerImg);
+
       _loadImage(newImgSrc, fullsize);
-      _updateSelected(this.parentNode);
+      _updateSelected(this.parentNode); // <li>
       _updateUrl(this.getAttribute('href'));
 
       e.preventDefault();
@@ -89,9 +96,14 @@ var Plots = function (options) {
     Xhr.ajax({
       url: src,
       success: function () {
-        el.classList.remove('spinner');
-        el.classList.add('fadeIn');
+        // Swap plot and remove spinner
         el.setAttribute('src', src);
+        el.parentNode.removeChild(_el.querySelector('.spinner'));
+
+        // Show plot (using fadeIn animation)
+        el.classList.remove('loading');
+        el.classList.add('fadeIn');
+        
         setTimeout(function () {
           el.classList.remove('fadeIn');
         }, 750);

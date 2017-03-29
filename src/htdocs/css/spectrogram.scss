@@ -29,17 +29,23 @@ h2 {
 
 .spectrogram {
   display: block;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
 
   &.fadeIn {
     animation: fadeIn .75s;
   }
+  &.loading {
+    opacity: 0;
+  }
   &.timespan-24hr {
     margin: 0 auto;
   }
+}
+
+.spinner {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .thumbs ul {
