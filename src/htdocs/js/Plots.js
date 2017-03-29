@@ -63,7 +63,7 @@ var Plots = function (options) {
         thumb;
 
     fullsize = _el.querySelector('.fullsize img');
-    
+
     if (fullsize) {
       fullsize.setAttribute('src', '../../../img/spinner.gif');
       fullsize.classList.add('spinner');
