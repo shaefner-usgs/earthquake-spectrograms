@@ -5,39 +5,90 @@ var Plots = function (options) {
   var _initialize,
       _this,
 
-      _addEvents,
+      _el,
+
+      _addListeners,
       _swapImage,
+      _updateSelected,
       _updateUrl;
 
   _this = {};
 
 
   _initialize = function (options) {
-    var lis;
+    var as;
 
     options = options || {};
-    lis = options.el.querySelector('.thumbs ul');
+    _el = options.el;
+    as = _el.querySelectorAll('.thumbs a');
 
-    _addEvents(lis);
+    _addListeners(as);
   };
 
-  _addEvents = function (lis) {
-    var i;
+  /**
+   * Add click handlers to thumbnail images
+   *
+   * @param as {NodeList}
+   */
+  _addListeners = function (as) {
+    var i,
+        length;
 
-    for (i = 0; i < lis.length; i ++) {
-      lis[i].addEventListener('click', function() {
-        _swapImage();
-        _updateUrl();
-      });
+    length = as.length;
+    for (i = 0; i < length; i ++) {
+      as[i].addEventListener('click', _swapImage);
     }
   };
 
-  _swapImage = function () {
+  /**
+   * Swap fullsize image with 'new' image selected by user
+   *
+   * @param e {Event}
+   */
+  _swapImage = function (e) {
+    var fullsize,
+        newImgSrc,
+        thumb;
 
+    fullsize = _el.querySelector('.fullsize img');
+    thumb = this.querySelector('img');
+    newImgSrc = thumb.getAttribute('src').replace('/tn-', '/');
+
+    fullsize.setAttribute('src', newImgSrc);
+
+    _updateSelected(this.parentNode);
+    _updateUrl(this.getAttribute('href'));
+
+    e.preventDefault();
   };
 
-  _updateUrl = function () {
+  /**
+   * Update selected image in thumbnail list
+   *
+   * @param li {Element}
+   */
+  _updateSelected = function (li) {
+    var i,
+        length,
+        lis;
 
+    lis = _el.querySelectorAll('.thumbs li');
+    length = lis.length;
+
+    for (i = 0; i < length; i ++) {
+      lis[i].classList.remove('selected');
+    }
+
+    li.classList.add('selected');
+  };
+
+  /**
+   * Update browser's address bar
+   *
+   * @param href {String}
+   */
+  _updateUrl = function (href) {
+    history.replaceState({}, '', href);
   };
 
 
