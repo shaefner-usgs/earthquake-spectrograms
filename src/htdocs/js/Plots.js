@@ -63,17 +63,20 @@ var Plots = function (options) {
         thumb;
 
     fullsize = _el.querySelector('.fullsize img');
-    thumb = this.querySelector('img');
-    newImgSrc = thumb.getAttribute('src').replace('/tn-', '/');
+    
+    if (fullsize) {
+      fullsize.setAttribute('src', '../../../img/spinner.gif');
+      fullsize.classList.add('spinner');
 
-    fullsize.setAttribute('src', '../../../img/spinner.gif');
-    fullsize.classList.add('spinner');
+      thumb = this.querySelector('img');
+      newImgSrc = thumb.getAttribute('src').replace('/tn-', '/');
 
-    _loadImage(newImgSrc, fullsize);
-    _updateSelected(this.parentNode);
-    _updateUrl(this.getAttribute('href'));
+      _loadImage(newImgSrc, fullsize);
+      _updateSelected(this.parentNode);
+      _updateUrl(this.getAttribute('href'));
 
-    e.preventDefault();
+      e.preventDefault();
+    }
   };
 
   /**
