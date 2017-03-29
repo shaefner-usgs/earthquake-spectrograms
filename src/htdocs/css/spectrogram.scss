@@ -9,11 +9,9 @@ h2 {
   flex-flow: row wrap;
 
   .fullsize {
-    align-items: center;
-    display: flex;
     flex-grow: 0;
     flex-shrink: 1;
-    justify-content: center;
+    position: relative;
   }
   .thumbs {
     flex: 1 0 0;
@@ -22,10 +20,11 @@ h2 {
 
 .spectrogram {
   display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
-  &.spinner {
-    max-width: 50%;
-  }
   &.timespan-24hr {
     margin: 0 auto;
   }
