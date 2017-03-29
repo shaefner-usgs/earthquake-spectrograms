@@ -90,7 +90,11 @@ var Plots = function (options) {
       url: src,
       success: function () {
         el.classList.remove('spinner');
+        el.classList.add('fadeIn');
         el.setAttribute('src', src);
+        setTimeout(function () {
+          el.classList.remove('fadeIn');
+        }, 750);
       },
       error: function (status) {
         console.log(status);

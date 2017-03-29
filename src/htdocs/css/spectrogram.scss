@@ -1,5 +1,14 @@
 @import '_common.scss';
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 h2 {
   margin-top: 0;
 }
@@ -25,6 +34,9 @@ h2 {
   top: 50%;
   transform: translate(-50%, -50%);
 
+  &.fadeIn {
+    animation: fadeIn .75s;
+  }
   &.timespan-24hr {
     margin: 0 auto;
   }
