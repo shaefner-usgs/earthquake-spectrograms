@@ -81,27 +81,19 @@ if (!isset($TEMPLATE)) {
       $file,
       $timespan
     );
-    $imgSize = getimagesize($filename);
-    $imgWidth = $imgSize[0] . 'px'; // width of full-size plot
-    $imgHeight = $imgSize[1] . 'px'; // height of full-size plot
   } else {
     $img = '<p class="alert info">' . $hour . ':00 - no data available</p>';
-    $imgWidth = '50%'; // width of alert
-    $imgHeight = 'auto';
   }
 
   // Create html for plot(s)
   if ($thumbsList) {
-    $plots = sprintf('<div class="fullsize" style="flex-basis: %s; width: %s; height: %s">
+    $plots = sprintf('<div class="fullsize">
           %s
         </div>
         <div class="thumbs">
           %s
         </div>
       </div>',
-      $imgWidth,
-      $imgWidth,
-      $imgHeight,
       $img,
       $thumbsList
     );
