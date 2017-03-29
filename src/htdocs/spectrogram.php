@@ -16,7 +16,8 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $CONFIG['MOUNT_PATH'] .
     '/css/spectrogram.css" />';
-  $FOOT = '';
+  $FOOT = '<script src="' . $CONFIG['MOUNT_PATH'] . '/js/spectrogram.js">
+    </script>';
 
   // Query db to get station details
   $rsStation = $db->queryStation($id);
