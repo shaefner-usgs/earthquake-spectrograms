@@ -1,6 +1,14 @@
 'use strict';
 
 
+/**
+ * Class for swapping between 2hr plots on a given day
+ *
+ * @param options {Object}
+ *     {
+ *       el: {Element}
+ *     }
+ */
 var Plots = function (options) {
   var _initialize,
       _this,
