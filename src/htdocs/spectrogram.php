@@ -16,8 +16,10 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $CONFIG['MOUNT_PATH'] .
     '/css/spectrogram.css" />';
-  $FOOT = '<script src="' . $CONFIG['MOUNT_PATH'] . '/js/spectrogram.js">
-    </script>';
+  if ($timespan === '2hr') { // no js needed for 24hr plots
+    $FOOT = '<script src="' . $CONFIG['MOUNT_PATH'] . '/js/spectrogram.js">
+      </script>';
+  }
 
   // Query db to get station details
   $rsStation = $db->queryStation($id);
@@ -87,7 +89,8 @@ if (!isset($TEMPLATE)) {
 
   // Create html for plot(s)
   if ($thumbsList) {
-    $plots = sprintf('<div class="fullsize">
+    $plots = sprintf('<div class="plots">
+        <div class="fullsize">
           %s
         </div>
         <div class="thumbs">
@@ -131,9 +134,7 @@ if (!isset($TEMPLATE)) {
   </ul>
 </header>
 
-<div class="plots">
-  <?php print $plots; ?>
-</div>
+<?php print $plots; ?>
 
 <p class="allstations"><?php print $allLink; ?> &raquo;</p>
 <p class="back">&laquo; <?php print $backLink;?></p>
