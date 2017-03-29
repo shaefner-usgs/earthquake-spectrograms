@@ -9,8 +9,11 @@ h2 {
   flex-flow: row wrap;
 
   .fullsize {
+    align-items: center;
+    display: flex;
     flex-grow: 0;
     flex-shrink: 1;
+    justify-content: center;
   }
   .thumbs {
     flex: 1 0 0;
@@ -20,6 +23,9 @@ h2 {
 .spectrogram {
   display: block;
 
+  &.spinner {
+    max-width: 50%;
+  }
   &.timespan-24hr {
     margin: 0 auto;
   }
@@ -35,7 +41,7 @@ h2 {
   li {
     border: 2px solid transparent;
     margin: .5em 0 0 .5em;
-    padding: 2px 4px 0px 4px;
+    padding: 2px 4px 0 4px;
     text-align: center;
     width: 150px;
 

@@ -1,6 +1,9 @@
 'use strict';
 
 
+var Xhr = require('util/Xhr');
+
+
 /**
  * Class for swapping between 2hr plots on a given day
  *
@@ -16,7 +19,8 @@ var Plots = function (options) {
       _el,
 
       _addListeners,
-      _swapImage,
+      _initSwap,
+      _loadImage,
       _updateSelected,
       _updateUrl;
 
@@ -44,16 +48,16 @@ var Plots = function (options) {
 
     length = as.length;
     for (i = 0; i < length; i ++) {
-      as[i].addEventListener('click', _swapImage);
+      as[i].addEventListener('click', _initSwap);
     }
   };
 
   /**
-   * Swap fullsize image with 'new' image selected by user
+   * Show loading spinner and call methods to load image and update interface
    *
    * @param e {Event}
    */
-  _swapImage = function (e) {
+  _initSwap = function (e) {
     var fullsize,
         newImgSrc,
         thumb;
@@ -62,12 +66,33 @@ var Plots = function (options) {
     thumb = this.querySelector('img');
     newImgSrc = thumb.getAttribute('src').replace('/tn-', '/');
 
-    fullsize.setAttribute('src', newImgSrc);
+    fullsize.setAttribute('src', '../../../img/spinner.gif');
+    fullsize.classList.add('spinner');
 
+    _loadImage(newImgSrc, fullsize);
     _updateSelected(this.parentNode);
     _updateUrl(this.getAttribute('href'));
 
     e.preventDefault();
+  };
+
+  /**
+   * Load img via ajax and swap it when done
+   *
+   * @param src {String} img src attr
+   * @param el {Element} fullsize img
+   */
+  _loadImage = function (src, el) {
+    Xhr.ajax({
+      url: src,
+      success: function () {
+        el.classList.remove('spinner');
+        el.setAttribute('src', src);
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
   };
 
   /**
