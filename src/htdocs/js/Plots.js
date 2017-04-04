@@ -96,14 +96,19 @@ var Plots = function (options) {
     Xhr.ajax({
       url: src,
       success: function () {
-        // Swap plot and remove spinner
+        var spinners;
+
+        // Swap plot and remove spinner(s - in case of non-responisve ajax req)
         el.setAttribute('src', src);
-        el.parentNode.removeChild(_el.querySelector('.spinner'));
+        spinners = _el.querySelectorAll('.spinner');
+        for (var i = 0; i < spinners.length; i ++) {
+          el.parentNode.removeChild(spinners[i]);
+        }
 
         // Show plot (using fadeIn animation)
         el.classList.remove('loading');
         el.classList.add('fadeIn');
-        
+
         setTimeout(function () {
           el.classList.remove('fadeIn');
         }, 750);
